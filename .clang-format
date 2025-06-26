@@ -1,0 +1,11 @@
+# 基础样式（选一个即可）
+BasedOnStyle: LLVM  # 或 Google, Chromium 等（LLVM 是 clangd 默认）
+IndentWidth: 4
+
+# 核心设置：强制指针符号靠近类型
+
+PointerAlignment: Left
+
+# 可选额外设置（根据需求添加）：
+DerivePointerAlignment: true    # 自动对齐指针风格
+AlignConsecutiveDeclarations: true  # 连续变量声明对齐
