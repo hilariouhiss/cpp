@@ -40,11 +40,11 @@ class 和 struct 具有统一的规则集，class 能干的，struct 也能干�
 
 如果constexpr条件的计算结果为true，则整个if-else将替换为true语句。如果constexpr条件的计算结果为false，则整个if-else将替换为false语句（如果存在else）或直接删除（如果没有else）。
 
-### C++容器
+## C++容器
 
-#### 顺序容器
+### 顺序容器
 
-##### `vector`（动态数组）
+#### `vector`（动态数组）
 
 - 特点：连续内存、随机访问高效（`O(1)`），尾部插入/删除高效，中间插入/删除成本高
 
@@ -97,7 +97,7 @@ class 和 struct 具有统一的规则集，class 能干的，struct 也能干�
   }
   ```
 
-##### `list`（双向链表）
+#### `list`（双向链表）
 
 - 特点：非连续内存，任意位置插入/删除高效（O(1)），不支持随机访问（需遍历）。
 
@@ -138,7 +138,7 @@ class 和 struct 具有统一的规则集，class 能干的，struct 也能干�
   }
   ```
 
-#####  `deque`（双端队列）
+####  `deque`（双端队列）
 
 - 特点：分段连续内存，支持高效头尾插入/删除（O(1)），随机访问效率接近 `vector`。
 
@@ -175,9 +175,9 @@ class 和 struct 具有统一的规则集，class 能干的，struct 也能干�
   }
   ```
 
-#### 关联容器（有序）
+### 关联容器（有序）
 
-##### `map`/`set`（红黑树实现）
+#### `map`/`set`（红黑树实现）
 
 - 特点：自动按键排序，查找/插入/删除时间复杂度  `O(log n)`。
 
@@ -222,7 +222,7 @@ class 和 struct 具有统一的规则集，class 能干的，struct 也能干�
   }
   ```
 
-##### `unordered_map`/`unordered_set`（哈希表实现）
+#### `unordered_map`/`unordered_set`（哈希表实现）
 
 - 特点：无序存储，平均查找/插入/删除时间复杂度 `O(1)`，最坏情况 `O(n)`。
 
@@ -263,9 +263,9 @@ class 和 struct 具有统一的规则集，class 能干的，struct 也能干�
   }
   ```
 
-#### 容器适配器
+### 容器适配器
 
-#####  `queue`（队列，默认基于 `deque`）
+####  `queue`（队列，默认基于 `deque`）
 
 - 特点：FIFO（先进先出），不支持遍历。
 
@@ -293,7 +293,7 @@ class 和 struct 具有统一的规则集，class 能干的，struct 也能干�
   }
   ```
 
-##### `stack`（栈，默认基于 `deque`）
+#### `stack`（栈，默认基于 `deque`）
 
 - 特点：LIFO（后进先出），不支持遍历。
 
@@ -340,3 +340,31 @@ class 和 struct 具有统一的规则集，class 能干的，struct 也能干�
 | 需快速查找（不要求有序） | `unordered_map`/`unordered_set` |  哈希表实现，平均 O(1) 查找   |
 |        FIFO 需求         |             `queue`             |          队列适配器           |
 |        LIFO 需求         |             `stack`             |           栈适配器            |
+
+## switch 
+
+case标签之前和之后声明或定义（但不能初始化）switch语句内的变量：
+
+```
+switch (1)
+{
+    int a; // okay: case标签之前可以声明变量
+    int b{ 5 }; // 不合法: case 标签之前，不可以初始化变量
+
+    case 1:
+        int y; // okay 但不推荐
+        y = 4; // okay: 赋值语句可以
+        break;
+
+    case 2:
+        int z{ 4 }; // 不合法: 后面还有case标签，不允许初始化变量
+        y = 5; // okay: y 在上面声明，所以这里可以赋值
+        break;
+
+    case 3:
+        break;
+}
+```
+
+switch内的所有语句都被视为同一作用域的一部分。因此，在 case 1 内声明或定义的变量可以在以后使用。
+	因为变量的初始化，需要在运行时执行（因为需要将初始值设置给变量）。如果后续还有case标签，则不允许初始化变量（因为初始化可能被跳过，这将使变量未初始化）。在第一个case标签之前不允许初始化，因为这些语句永远不会执行，switch语句无法指定到它们。
