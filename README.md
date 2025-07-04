@@ -341,7 +341,9 @@ class 和 struct 具有统一的规则集，class 能干的，struct 也能干�
 |        FIFO 需求         |             `queue`             |          队列适配器           |
 |        LIFO 需求         |             `stack`             |           栈适配器            |
 
-## switch 
+## 流程控制与错误处理
+
+### switch 
 
 case标签之前和之后声明或定义（但不能初始化）switch语句内的变量：
 
@@ -368,3 +370,54 @@ switch (1)
 
 switch内的所有语句都被视为同一作用域的一部分。因此，在 case 1 内声明或定义的变量可以在以后使用。
 	因为变量的初始化，需要在运行时执行（因为需要将初始值设置给变量）。如果后续还有case标签，则不允许初始化变量（因为初始化可能被跳过，这将使变量未初始化）。在第一个case标签之前不允许初始化，因为这些语句永远不会执行，switch语句无法指定到它们。
+
+### goto
+
+```C++
+#include <iostream>
+#include <cmath> // 引用 sqrt() 函数
+
+int main()
+{
+    double x{};
+tryAgain: // 这是标签语句
+    std::cout << "Enter a non-negative number: "; 
+    std::cin >> x;
+
+    if (x < 0.0)
+        goto tryAgain; // 这是goto语句
+
+    std::cout << "The square root of " << x << " is " << std::sqrt(x) << '\n';
+    return 0;
+}
+```
+
+标签具有函数作用域，在整个函数范围内可见。
+
+限制：
+
+1. 只能在单个函数的边界内跳转
+2. 若是向前跳转，则不能跳过变量的显式初始化
+
+### `std::exit` 提前退出程序
+
+显式调用 `std::exit()`，不会清理任何局部变量（当前函数中，以及在调用堆栈上的函数中）。因此，通常最好避免显式调用 `std::exit()`。
+
+但C++提供了 `std::atexit()`，它允许指定一个函数，以在程序退出前自动调用。该函数通常用于执行一些清理工作。
+
+关于`std::atexit()`和清理函数的几点注意事项：
+
+1. 由于在`main()`终止时隐式调用`std::exit()`，因此如果程序以这种方式退出，也会调用`std::atexit()`注册的任何函数。
+2. 被注册的函数必须没有参数，并且没有返回值。
+3. 如果需要，可以使用`std::atexit()`注册多个清理函数，它们将按注册的相反顺序调用（最后注册的函数将首先调用）。
+
+#### `std::quick_exit()` 和 `std:∶at_quick_exit()`
+
+在多线程程序中，调用 `std::exit()` 可能会导致程序崩溃（因为调用 `std::exit() `的线程将清理可能仍然被其他线程访问的静态对象）。由于这个原因，C++引入了另一对函数，`std::quick_exit() `和 `std:∶at_quick_exit()`。`std::quick_exit()` 会终止程序，但不会清理静态对象，并且不一定执行其他类型的清理。对于以 `std::quick_exit()` 终止的程序，`std::at_quick_exit()` 扮演与 `std:∶atexit()` 相同的角色。
+
+#### `std::abort` 和 `std::terminate`
+
+`std::abort` 将使程序异常退出，且不执行任何清理工作
+
+`std::terminate` 通常与异常一起使用，处理异常时常被隐式调用。在默认情况下，`std::terminate` 将调用 `std::abort`。
+

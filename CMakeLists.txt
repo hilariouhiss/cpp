@@ -1,8 +1,7 @@
-cmake_minimum_required(VERSION 3.10.0)
-project(cpp VERSION 0.1.0 LANGUAGES C CXX)
+cmake_minimum_required(VERSION 3.31)
+project(cpp VERSION 0.1.0 LANGUAGES CXX)
 
-# 设置全局 C++17 标准
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 23)
 
-add_executable(cpp main.cpp)
+add_executable(cpp main.cpp
+)
