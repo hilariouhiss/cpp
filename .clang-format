@@ -1,13 +1,17 @@
 ---
+# Based on LLVM style, with customizations and Qt-specific settings
 Language: Cpp
 BasedOnStyle: LLVM
 AccessModifierOffset: -4
+AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: true
-AlignOperands: true
-AlignTrailingComments: true
+AlignOperands: Align
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 0
 AlwaysBreakTemplateDeclarations: Yes
-BraceWrapping: 
+BraceWrapping:
   AfterCaseLabel: false
   AfterClass: false
   AfterControlStatement: false
@@ -27,33 +31,69 @@ BraceWrapping:
 BreakBeforeBraces: Custom
 BreakConstructorInitializers: AfterColon
 BreakConstructorInitializersBeforeComma: false
+BreakTemplateDeclarations: Yes
 ColumnLimit: 120
-ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ContinuationIndentWidth: 8
-IncludeCategories: 
-  - Regex: '^<.*'
-    Priority: 1
-  - Regex: '^".*'
-    Priority: 2
-  - Regex: '.*'
-    Priority: 3
-IncludeIsMainRegex: '([-_](test|unittest))?$'
-IndentCaseLabels: true
-IndentPPDirectives: BeforeHash
 IndentWidth: 4
-InsertNewlineAtEOF: true
-MacroBlockBegin: ''
-MacroBlockEnd: ''
-MaxEmptyLinesToKeep: 2
-NamespaceIndentation: All
+TabWidth: 4
 PointerAlignment: Left
 SpaceAfterCStyleCast: true
-SpaceAfterTemplateKeyword: false
-SpaceBeforeRangeBasedForLoopColon: false
-SpaceInEmptyParentheses: false
 SpacesInAngles: false
+SpacesInParentheses: false
 SpacesInConditionalStatement: false
 SpacesInCStyleCastParentheses: false
-SpacesInParentheses: false
-TabWidth: 4
+SpaceAfterTemplateKeyword: false
+SpaceBeforeRangeBasedForLoopColon: false
+InsertNewlineAtEOF: true
+MaxEmptyLinesToKeep: 2
+NamespaceIndentation: All
+IndentCaseLabels: true
+IndentPPDirectives: BeforeHash
+# Qt-related include ordering
+IncludeCategories:
+  - Regex: '^<Q.*'
+    Priority: 1
+  - Regex: '^<.*'
+    Priority: 2
+  - Regex: '^".*"'
+    Priority: 3
+# Macros for Qt and common patterns
+ForEachMacros:
+  - forever
+  - foreach
+  - Q_FOREACH
+StatementMacros:
+  - Q_UNUSED
+  - QT_BEGIN_NAMESPACE
+  - QT_END_NAMESPACE
+  - Q_MOC_INCLUDE
+  - Q_CLASSINFO
+  - Q_ENUM
+  - Q_ENUM_NS
+  - Q_FLAG
+  - Q_FLAG_NS
+  - Q_GADGET
+  - Q_GADGET_EXPORT
+  - Q_PROPERTY
+  - Q_REVISION
+  - Q_DISABLE_COPY
+  - Q_SET_OBJECT_NAME
+  - Q_LOGGING_CATEGORY
+  - Q_NAMESPACE
+  - Q_NAMESPACE_EXPORT
+# Attribute-like Qt macros
+StatementAttributeLikeMacros:
+  - Q_EMIT
+  - emit
+# Include main test headers last
+IncludeIsMainRegex: '([-_](test|unittest))?$'
+# Other settings inherited from first config
+BreakBeforeBinaryOperators: None
+BreakAfterReturnType: None
+AllowAllArgumentsOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+BinPackArguments: false
+BinPackParameters: true
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+
 ...
